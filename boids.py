@@ -10,7 +10,7 @@
 #                                                                            #
 # Created with Panda3D version 1.3.2, may need this version for py to work.  #
 #                                                                            #
-# Copyright 2006 David Lettier.                                              #
+# Copyright 2013 David Lettier.                                              #
 #                                                                            #
 ##############################################################################
 try:
