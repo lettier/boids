@@ -6,7 +6,7 @@
 #                                                                            #
 # Special thanks to Daniel Shiffman. http://www.shiffman.net/                #
 #                                                                            #
-# http://www.dldownload.info/                                                #
+# http://www.lettier.com/                                                    #
 #                                                                            #
 # Created with Panda3D version 1.3.2, may need this version for py to work.  #
 #                                                                            #
