@@ -8,4 +8,4 @@ To use, you will need Panda3D version 1.3.2.
 
 Special thanks to Daniel Shiffman. http://www.shiffman.net/               
 
-Copyright 2006 David Lettier. http://www.lettier.com/ 
+Copyright 2013 David Lettier. http://www.lettier.com/ 
