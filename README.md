@@ -1,4 +1,4 @@
-Autonomous Steering Behaviors: Seek & Arrive
+#Autonomous Steering Behaviors: Seek & Arrive
 
 A boids clone done in 3D using the Panda3D API. 
 To use, you will need Panda3D version 1.3.2.
