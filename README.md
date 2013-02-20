@@ -1,7 +1,6 @@
 #Autonomous Steering Behaviors: Seek & Arrive
 
-A boids clone done in 3D using the Panda3D API. You move the green ball with your mouse while the one "bird" 
-seeks out the ball and the over avoids the ball.
+A boids clone done in 3D using the Panda3D API. You move the green ball with your mouse while the blue boid arrives at the ball and the red boid seeks out the ball.
 
 To use, you will need Panda3D version 1.3.2.
 
