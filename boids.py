@@ -8,10 +8,11 @@
 #                                                                            #
 # http://www.lettier.com/                                                    #
 #                                                                            #
-# Created with Panda3D version 1.3.2, may need this version for py to work.  #
+# Works with Panda3D version 1.9.2.                                          #
 #                                                                            #
-# Copyright 2013 David Lettier.                                              #
+# Copyright 2016 David Lettier.                                              #
 #                                                                            #
+# http://www.lettier.com/                                                    #
 ##############################################################################
 try:
     import sys, os, math, random, time
@@ -29,12 +30,12 @@ try:
     from direct.gui.DirectGui                import *
     from pandac.PandaModules                 import CollisionTraverser, CollisionNode
     from pandac.PandaModules                 import CollisionHandlerQueue, CollisionRay, CollisionPlane
-    import direct.directbase.DirectStart    
-    # end try 
+    import direct.directbase.DirectStart
+    # end try
 except ImportError, err:
     # we have an import error
-    print "ImportError: %s." % ( err ) # print the error    
-    sys.exit( 1 ) # exit the program    
+    print "ImportError: %s." % ( err ) # print the error
+    sys.exit( 1 ) # exit the program
     # end except
 #
 class cBoid:
@@ -55,7 +56,7 @@ class cBoid:
         # load in model file
         self.boidModel = loader.loadModel( modelSrc )
         # parent
-        self.boidModel.reparentTo( render ) 
+        self.boidModel.reparentTo( render )
         # set location
         self.boidModel.setPos( location )
         # set max force / speed
@@ -78,12 +79,12 @@ class cBoid:
         # add steer vector to acceleration vector
         self.acceleration = self.acceleration + self.steer( target, 0 )
         # look at target
-        self.boidModel.lookAt( Point3( target ) ) 
+        self.boidModel.lookAt( Point3( target ) )
     def arrive( self, target ):
         # add steer vector to acceleration vector
         self.acceleration = self.acceleration + self.steer( target, 1 )
         # look at target
-        self.boidModel.lookAt( Point3( target ) ) 
+        self.boidModel.lookAt( Point3( target ) )
     def steer( self, target, slowDown ):
         # create steering vector
         steer = Vec3( )
@@ -95,7 +96,7 @@ class cBoid:
         # if distance/magnitude is creater than one
         if ( distance > 1.0 ):
             # normalize desired vector
-            desired.normalize( ) 
+            desired.normalize( )
             # if we are arriving we need to slow down as we approach
             if ( ( slowDown > 0 ) and ( distance < 100.0 ) ):
                 # multiply desired vector by ( max speed * ( distance / 100.0 ) )
@@ -109,7 +110,7 @@ class cBoid:
             # limit steering vector to max force
             if ( steer.length( ) > self.maxForce ):
                 steer.normalize( ) # normalize. set magnitude to one.
-                steer = steer * self.maxForce # multiply the manitude (=1) 
+                steer = steer * self.maxForce # multiply the manitude (=1)
                                               # with max force
                                               # thus, manitude is = max force
         # else
@@ -125,7 +126,7 @@ class cBoid:
 class cWorld:
     def __init__( self ):
         #  set background color
-        base.setBackgroundColor( 0, 0, 0 ) 
+        base.setBackgroundColor( 0, 0, 0 )
         # create target
         self.createTarget( )
         # create boids
@@ -151,7 +152,7 @@ class cWorld:
         # load in model file
         self.target = loader.loadModel( 'assets/models/target.egg' )
         # parent
-        self.target.reparentTo( render ) 
+        self.target.reparentTo( render )
         # set location
         self.target.setPos( Vec3( 0.0, 0.0, 0.0 ) )
     def setupCamera( self ):
@@ -162,13 +163,13 @@ class cWorld:
     def setupLights( self ):
         # create a point light
         plight = PointLight( 'plight' )
-        # set its color 
+        # set its color
         plight.setColor( VBase4( 1.0, 1.0, 1.0, 1 ) )
-        # attach the light to the render 
-        plnp = render.attachNewNode( plight.upcastToPandaNode( ) )
+        # attach the light to the render
+        plnp = render.attachNewNode( plight )
         # set position
         plnp.setPos( 0.0, 0.0, 2.0 )
-        # turn on light 
+        # turn on light
         render.setLight( plnp )
     def setupCollision( self ):
         # create collision traverser
@@ -179,11 +180,11 @@ class cWorld:
         self.pickerNode = CollisionNode( 'mouseRay' ) # create collision node
         # attach new collision node to camera node
         self.pickerNP = camera.attachNewNode( self.pickerNode ) # attach collision node to camera
-        # set bit mask to one 
+        # set bit mask to one
         self.pickerNode.setFromCollideMask( BitMask32.bit( 1 ) ) # set bit mask
         # create a collision ray
         self.pickerRay = CollisionRay( ) # create collision ray
-        # add picker ray to the picker node 
+        # add picker ray to the picker node
         self.pickerNode.addSolid( self.pickerRay ) # add the collision ray to the collision node
         # make the traverser know about the picker node and its even handler queue
         self.picker.addCollider( self.pickerNP, self.pq ) # add the colision node path and collision handler queue
@@ -220,13 +221,13 @@ class cWorld:
     def moveTarget( self, Task ):
         # traverse through the render tree
         self.picker.traverse( render )
-        # go through the queue of collisions 
-        for i in range( self.pq.getNumEntries( ) ): 
+        # go through the queue of collisions
+        for i in range( self.pq.getNumEntries( ) ):
             entry = self.pq.getEntry( i ) # get entry
             surfacePoint = entry.getSurfacePoint( render ) # get surface point of collision
-            self.target.setPos( surfacePoint ) # set surface point to target's position 
+            self.target.setPos( surfacePoint ) # set surface point to target's position
         if base.mouseWatcherNode.hasMouse( ): # if we have a mouse
-            mpos = base.mouseWatcherNode.getMouse( ) # get the path to the mouse 
+            mpos = base.mouseWatcherNode.getMouse( ) # get the path to the mouse
             # shoot ray from camera
             # based on X & Y coordinate of mouse
             self.pickerRay.setFromLens( base.camNode, mpos.getX( ), mpos.getY( ) )
@@ -241,9 +242,9 @@ class cApplication( DirectObject ):
         # display title information
         self.title = OnscreenText( text = 'BOIDS.PY - SEEK & ARRIVE', fg = ( 1.0, 1.0, 1.0, 1.0), pos = ( -.98, .9 ), scale = 0.06 )
         # display copright information
-        self.copyRight = OnscreenText( text = 'Copyright (C) 2007 David Lettier.', fg = ( 1.0, 1.0, 1.0, 1.0), pos = ( .98, -.98 ), scale = 0.05 )
+        self.copyRight = OnscreenText( text = 'Copyright (C) 2016 David Lettier.', fg = ( 1.0, 1.0, 1.0, 1.0), pos = ( .98, -.98 ), scale = 0.05 )
         # display panda version text
-        self.pandaVersion = OnscreenText( text = 'Panda Version 1.3.2', fg = ( 1.0, 1.0, 1.0, 1.0), pos = ( -1.18, -.98 ), scale = 0.04 )
+        self.pandaVersion = OnscreenText( text = 'Panda Version 1.9.2', fg = ( 1.0, 1.0, 1.0, 1.0), pos = ( -1.18, -.98 ), scale = 0.04 )
         # display print debug button
         # this button calls the prntDebug function
         self.prntDebugButton = DirectButton( text = "Print Debug", relief = DGG.RAISED, scale = .1, pad = ( .5, .5 ), pos = Vec3( -1.0, 0.0, -.8 ), command = self.prntDebug )
@@ -287,5 +288,5 @@ class cApplication( DirectObject ):
 # create application instance
 application = cApplication( )
 #
-if __name__ == '__main__': 
-    run( ) # if this module is not being imported run the game
+if __name__ == '__main__':
+    base.run( ) # if this module is not being imported run the game
